@@ -26,7 +26,7 @@ RIGHT = 4
 class BoxWorldEnv(gym.Env):
 
 
-    def __init__(self,dims=(12,12)):
+    def __init__(self,dims=(12,12),max_depth=5,max_branches=2,max_branch_depth=1,max_nodes=10):
         self.colors = [(153, 51, 255),
               (51, 51, 255),
               (51, 153, 255),
@@ -39,7 +39,10 @@ class BoxWorldEnv(gym.Env):
               (255, 51, 51),
               (255, 51, 255)]
         #self.graph = graph
-
+        self.max_depth=max_depth
+        self.max_branches=max_branches
+        self.max_branch_depth=max_branch_depth
+        self.max_nodes=max_nodes
         self.dims = dims
         self.position_node_map = {}
         self.position_key_color_map = {}
