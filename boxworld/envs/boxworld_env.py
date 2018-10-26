@@ -11,7 +11,7 @@ matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
 import numpy as np
-from scipy.misc import imresize
+
 from common.graph import *
 
 
@@ -161,6 +161,7 @@ class BoxWorldEnv(gym.Env):
 
 
     def reset(self):
+        self.graph = Graph(depth=5)
         return self._gridmap_to_image()
 
     def _gridmap_to_image(self):
@@ -191,7 +192,7 @@ class BoxWorldEnv(gym.Env):
 
 
 
-        return imresize(image, 10 * 100, interp='nearest')
+        return image#imresize(image, 10 * 100, interp='nearest')
 
 
 

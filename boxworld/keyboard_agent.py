@@ -12,6 +12,7 @@ from common.graph import *
 #
 import pygame
 import numpy as np
+from scipy.misc import imresize
 
 a = Graph(depth=10)
 env = boxworld.envs.boxworld_env.BoxWorldEnv(a)
@@ -29,7 +30,7 @@ human_wants_restart = False
 human_sets_pause = False
 
 
-initial_img = env.reset()
+initial_img = imresize(env.reset(), 1000, interp='nearest')
 initial_img = np.flip(np.rot90(initial_img),0)
 #one noop
 pygame.init()
@@ -55,6 +56,7 @@ while running:
             if event.key == pygame.K_r:
                 key_pressed = True
                 obs = env.reset()
+                obs = imresize(obs, 1000, interp='nearest')
                 surf = pygame.surfarray.make_surface(np.flip(np.rot90(obs), 0))
                 display.blit(surf, (0, 0))
                 game_done = False
@@ -62,6 +64,7 @@ while running:
 
     if key_pressed and not game_done:
         obs, r, done, info = env.step(key_pressed)
+        obs = imresize(obs, 1000, interp='nearest')
         game_done = done
         print("reward", r)
         display.blit(background, (0,0))
