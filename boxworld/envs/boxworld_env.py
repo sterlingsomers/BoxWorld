@@ -26,7 +26,7 @@ RIGHT = 4
 class BoxWorldEnv(gym.Env):
 
 
-    def __init__(self,graph,dims=(12,12)):
+    def __init__(self,dims=(12,12)):
         self.colors = [(153, 51, 255),
               (51, 51, 255),
               (51, 153, 255),
@@ -38,8 +38,8 @@ class BoxWorldEnv(gym.Env):
               (255, 153, 51),
               (255, 51, 51),
               (255, 51, 255)]
-        self.graph = graph
-        self.color_graph(self.graph)
+        #self.graph = graph
+
         self.dims = dims
         self.position_node_map = {}
         self.position_key_color_map = {}
@@ -69,50 +69,7 @@ class BoxWorldEnv(gym.Env):
 
 
 
-        current_node = self.graph.trunk_nodes[0] #goal node
-        finished_nodes = []#ordered by placement & distance from goal
-        keep_going = True
 
-        while keep_going:
-
-            links = [node for node in current_node.links if node not in finished_nodes]
-            if not links:
-                free_spaces = np.where(self.current_grid_map == 0)
-                free_spaces = list(zip(free_spaces[0], free_spaces[1]))
-                free_spaces = [i for i in free_spaces if i[1] > 1]  # and i[1] > 1]
-                free_spaces = [i for i in free_spaces if i[0] < dims[0] - 1 and i[1] < dims[1] - 1]
-                free_space = random.choice(free_spaces)
-                self.current_grid_map[free_space[0], free_space[1]] = 4
-                self.position_node_map[(free_space[0], free_space[1])] = node
-                self.open_key = [free_space[0], free_space[1]]
-
-                break
-            for node in links:
-                free_spaces = np.where(self.current_grid_map == 0)
-                free_spaces = list(zip(free_spaces[0],free_spaces[1]))
-                free_spaces = [i for i in free_spaces if i[1] > 1]# and i[1] > 1]
-                free_spaces = [i for i in free_spaces if i[0] < dims[0] - 1  and i[1] < dims[1] -1]
-                # pick a random free space
-                free_space = random.choice(free_spaces)
-                # populate the current_grid_map & store it
-                self.current_grid_map[free_space[0], free_space[1]] = 3
-                self.current_grid_map[free_space[0], free_space[1] - 1] = 4
-                self.fill_neighbours(free_space, self.current_grid_map)
-                #node.location = free_space
-                # store the coordanate-node relationship
-                self.position_node_map[(free_space[0], free_space[1] - 1)] = current_node
-                self.position_key_color_map[(free_space[0], free_space[1])] = node.color
-                #self.position_node_map[(free_space[0], free_space[1])] = node
-                #self.position_key_color_map[(free_space[0], free_space[1] - 1)] = current_node.color
-                finished_nodes.append(current_node)
-                current_node = node
-
-        #insert the agent
-        free_spaces = np.where(self.current_grid_map == 0)
-        free_spaces = list(zip(free_spaces[0], free_spaces[1]))
-        free_space = random.choice(free_spaces)
-        #self.agent_position = free_space
-        self.current_grid_map[free_space[0], free_space[1]] = 5
 
 
 
@@ -162,6 +119,51 @@ class BoxWorldEnv(gym.Env):
 
     def reset(self):
         self.graph = Graph(depth=5)
+        self.color_graph(self.graph)
+        current_node = self.graph.trunk_nodes[0]  # goal node
+        finished_nodes = []  # ordered by placement & distance from goal
+        keep_going = True
+
+        while keep_going:
+
+            links = [node for node in current_node.links if node not in finished_nodes]
+            if not links:
+                free_spaces = np.where(self.current_grid_map == 0)
+                free_spaces = list(zip(free_spaces[0], free_spaces[1]))
+                free_spaces = [i for i in free_spaces if i[1] > 1]  # and i[1] > 1]
+                free_spaces = [i for i in free_spaces if i[0] < self.dims[0] - 1 and i[1] < self.dims[1] - 1]
+                free_space = random.choice(free_spaces)
+                self.current_grid_map[free_space[0], free_space[1]] = 4
+                self.position_node_map[(free_space[0], free_space[1])] = node
+                self.open_key = [free_space[0], free_space[1]]
+
+                break
+            for node in links:
+                free_spaces = np.where(self.current_grid_map == 0)
+                free_spaces = list(zip(free_spaces[0], free_spaces[1]))
+                free_spaces = [i for i in free_spaces if i[1] > 1]  # and i[1] > 1]
+                free_spaces = [i for i in free_spaces if i[0] < self.dims[0] - 1 and i[1] < self.dims[1] - 1]
+                # pick a random free space
+                free_space = random.choice(free_spaces)
+                # populate the current_grid_map & store it
+                self.current_grid_map[free_space[0], free_space[1]] = 3
+                self.current_grid_map[free_space[0], free_space[1] - 1] = 4
+                self.fill_neighbours(free_space, self.current_grid_map)
+                # node.location = free_space
+                # store the coordanate-node relationship
+                self.position_node_map[(free_space[0], free_space[1] - 1)] = current_node
+                self.position_key_color_map[(free_space[0], free_space[1])] = node.color
+                # self.position_node_map[(free_space[0], free_space[1])] = node
+                # self.position_key_color_map[(free_space[0], free_space[1] - 1)] = current_node.color
+                finished_nodes.append(current_node)
+                current_node = node
+
+        # insert the agent
+        free_spaces = np.where(self.current_grid_map == 0)
+        free_spaces = list(zip(free_spaces[0], free_spaces[1]))
+        free_space = random.choice(free_spaces)
+        # self.agent_position = free_space
+        self.current_grid_map[free_space[0], free_space[1]] = 5
         return self._gridmap_to_image()
 
     def _gridmap_to_image(self):

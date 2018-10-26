@@ -14,8 +14,8 @@ import pygame
 import numpy as np
 from scipy.misc import imresize
 
-a = Graph(depth=10)
-env = boxworld.envs.boxworld_env.BoxWorldEnv(a)
+#a = Graph(depth=10)
+env = boxworld.envs.boxworld_env.BoxWorldEnv()
 #env = gym.make('Gridworld1-v1')
 
 # if not hasattr(env.action_space, 'n'):
