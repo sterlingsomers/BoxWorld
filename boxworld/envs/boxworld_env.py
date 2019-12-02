@@ -176,6 +176,8 @@ class BoxWorldEnv(gym.Env):
         for x,y in list(zip(walls[0],walls[1])):
             #print((x,y))
             image[x,y,:] = [0,0,0]
+        #put the current key in
+        image[0,0,:] = self.current_key_color
         boxes = np.where(self.current_grid_map == 4)
         #print("boxes",boxes)
         #print(self.position_node_map)
