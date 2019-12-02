@@ -44,6 +44,11 @@ class Graph:
             #link it
             self.add_node(node,self.trunk_nodes[-1:])
 
+    def add_branch(self,node=None):
+        if node is None:
+            random_node = random.choice(self.trunk_nodes)
+
+
     def add_node(self,node,nodes=[]):
         if not nodes:
             return 0

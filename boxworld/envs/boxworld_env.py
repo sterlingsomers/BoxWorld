@@ -6,8 +6,8 @@ from gym import spaces
 from gym.utils import seeding
 import random
 import itertools
-import matplotlib
-matplotlib.use('TkAgg')
+# import matplotlib
+# matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
 import numpy as np
@@ -68,7 +68,6 @@ class BoxWorldEnv(gym.Env):
         #all keys = 4
         #no-go space = > 0 - (2,3)
         #will make map {tuple(map(int,val)):color} where each tuple is a coordinate in the
-
 
 
 
@@ -243,7 +242,7 @@ class BoxWorldEnv(gym.Env):
 
         return self._gridmap_to_image(), reward, done, info
 
-#I don't think you can reliably have more than 8 nodes
+# I don't think you can reliably have more than 8 nodes
 # for i in range(10000):
 #     print('attempt',i)
 #     a = Graph(depth=10)
@@ -265,7 +264,7 @@ class BoxWorldEnv(gym.Env):
 #     # plt.imshow(img)
 #     # plt.show()
 #     time.sleep(5)
-
-print("ok")
+#
+# print("ok")
 
 
